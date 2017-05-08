@@ -12,7 +12,6 @@ public class Game {
 		
 		frame.setAlwaysOnTop(true);
 		frame.setVisible(true);
-		
     }
 
 }

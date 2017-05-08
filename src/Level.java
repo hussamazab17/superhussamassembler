@@ -7,37 +7,29 @@ import java.util.Random;
 
 public class Level {
 	
+	/*
+	A = AIR
+	B = GRASS
+	C = DIRT
+	D = LAVA
+	E = ENEMY
+	F = PLATFORM
+	X = STAR
+	*/
+	
 	private char arr[][];
 	private String name;
 	
-	public Level() {
-		arr = new char[5][5];
-		
-		char[] str = {'A', 'B', 'C'};
-		
-		Random rand = new Random();
-		
-		for(int r = 0; r < 5; r++) {
-			for(int c = 0; c < 5; c++) {
-				arr[r][c] = str[rand.nextInt(3)];
-			}
-		}
-		
-		name = "test";
+	public Level(String name, char[][] arr) {
+		this.name = name;
+		this.arr = arr;
 	}
 	
 	public void save() throws IOException {
 		File f = new File(name + ".txt");
 		
-		int i = 0;
-		
-		while(f.exists()) {
-			f = new File(name + ++i + ".txt");
-		}
-		
-		f.createNewFile();
-		
-		System.out.println(f.getName());
+		if(!f.exists()) 
+			f.createNewFile();
 		
 		f.setWritable(true);
 		

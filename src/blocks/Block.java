@@ -2,11 +2,12 @@ package blocks;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.Rectangle;
 
-public abstract class Block {
+public abstract class Block extends Rectangle {
 
 	private Color color;
-	private Image image;	
+	private Image image;
 	
 	public Block(Color color) {
 		this.color = color;

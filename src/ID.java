@@ -5,12 +5,6 @@ public enum ID {
 	
 	A, B, C;
 	
-	Class cl;
-	
-	ID(Class cl) {
-		this.cl = cl;
-	}
-	
 	Object getNewObject() throws Exception {
 		switch(this) {
 			case A:

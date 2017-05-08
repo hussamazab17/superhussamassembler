@@ -45,6 +45,8 @@ class Level {
 		
 		f.createNewFile();
 		
+		System.out.println(f.getName());
+		
 		f.setWritable(true);
 		
 		FileWriter fw = new FileWriter(f);
@@ -55,10 +57,11 @@ class Level {
 		
 		for(char[] carr : arr) {
 			System.out.println(new String(carr));
-			for(char c : carr) {
-				fw.write(c);
-			}
+			fw.append(new String(carr) + System.lineSeparator());
 		}
+		
+		fw.flush();
+		fw.close();
 	}
 	
 }

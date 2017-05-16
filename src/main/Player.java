@@ -1,3 +1,5 @@
+package main;
+
 
 import java.awt.KeyEventDispatcher;
 import java.awt.Rectangle;

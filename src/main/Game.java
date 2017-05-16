@@ -1,8 +1,13 @@
+package main;
+
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import panel.GamePanel;
+import panel.LevelEditorPanel;
+import panel.MainMenuPanel;
 
 public class Game {
 
@@ -12,20 +17,6 @@ public class Game {
 		frame = new JFrame("Super Hassam Assembler");
 		frame.setSize(1920, 1080);
 		frame.setUndecorated(true);
-		
-		final AnimationSquare ANI = new AnimationSquare(new Rectangle(0, 0, 40, 40));
-		
-		JPanel panel = new JPanel() {		
-			public void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				g.setColor(ANI.getColor());
-				g.drawRect((int) ANI.getX(), (int)ANI.getY(), 
-						(int) ANI.getHeight(), (int) ANI.getWidth());
-			}
-		};
-		
-		panel.addMouseListener(ANI);
-		panel.addMouseMotionListener(ANI);
 		
 		Thread t = new Thread() {
 			public void run() {
@@ -41,10 +32,35 @@ public class Game {
 		
 		t.start();
 		
-		frame.add(panel);
+		switchPanel(1);
 		
 		frame.setAlwaysOnTop(true);
 		frame.setVisible(true);
     }
+	
+	/*
+		0 = MAIN
+		1 = EDITOR
+		2 = GAME
+	*/
+	public static void switchPanel(int i) {
+		if(i < 0 || i > 2) return;
+		for(int x = 0; x < frame.getComponentCount(); x++) {
+			if(frame.getComponent(x) instanceof JPanel)
+				frame.remove(frame.getComponent(x--));
+		}
+		
+		switch(i) {
+			case 0:
+				frame.add(new MainMenuPanel());
+				break;
+			case 1:
+				frame.add(new LevelEditorPanel());
+				break;
+			case 2:
+				frame.add(new GamePanel());
+				break;
+		}
+	}
 
 }

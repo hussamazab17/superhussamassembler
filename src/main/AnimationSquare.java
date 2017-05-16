@@ -1,3 +1,5 @@
+package main;
+
 
 import java.awt.Color;
 import java.awt.Point;
@@ -10,6 +12,7 @@ public class AnimationSquare implements MouseListener, MouseMotionListener {
 	
 	private Rectangle r;
 	private Color current, c1, c2;
+	private boolean collide = false;
 	
 	public AnimationSquare(Rectangle r) {
 		this.r = r;
@@ -23,8 +26,13 @@ public class AnimationSquare implements MouseListener, MouseMotionListener {
 		this.current = c1;
 		this.c1 = c1;
 		this.c2 = c2;
+		this.current = c1;
 	}
-
+	
+	public Rectangle getRectangle() {
+		return r;
+	}
+	
 	public double getX() {
 		return r.getX();
 	}
@@ -49,7 +57,12 @@ public class AnimationSquare implements MouseListener, MouseMotionListener {
 		return current;
 	}
 	
+	public boolean mouseIsInside() {
+		return collide;
+	}
+	
 	private void switchCurrent() {
+		collide = !collide;
 		if(current == c1) {
 			current = c2;
 			return;
@@ -59,8 +72,8 @@ public class AnimationSquare implements MouseListener, MouseMotionListener {
 	
 	private boolean isInside(Point p) {
 		return p.getX() >= r.getX() && p.getY() >= r.getY() &&
-				p.getX() <= r.getX() + r.getWidth() &&
-				p.getY() <= r.getY() + r.getHeight();
+				p.getX() <= r.getX() + r.getWidth() - 1 &&
+				p.getY() <= r.getY() + r.getHeight() - 1;
 	}
 	
 	@Override
@@ -83,7 +96,17 @@ public class AnimationSquare implements MouseListener, MouseMotionListener {
 	public void mouseExited(MouseEvent me) {}
 
 	@Override
-	public void mouseDragged(MouseEvent me) {}
+	public void mouseDragged(MouseEvent me) {
+		Point p = me.getPoint();
+		
+		if(isInside(p)) {
+			if(current == c1)
+				switchCurrent();
+		} else {
+			if(current == c2)
+				switchCurrent();
+		}
+	}
 
 	@Override
 	public void mouseMoved(MouseEvent me) {

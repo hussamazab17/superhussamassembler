@@ -29,9 +29,8 @@ public class Game {
 		
 		t.start();
 		
-		switchPanel(0);
+		frame.add(new MainMenuPanel());
 		
-		frame.setAlwaysOnTop(true);
 		frame.setVisible(true);
     }
 	
@@ -42,10 +41,8 @@ public class Game {
 	*/
 	public static void switchPanel(int i) {
 		if(i < 0 || i > 2) return;
-		for(int x = 0; x < frame.getComponentCount(); x++) {
-			if(frame.getComponent(x) instanceof JPanel)
-				frame.remove(frame.getComponent(x--));
-		}
+		
+		frame.removeAll();
 		
 		switch(i) {
 			case 0:
@@ -58,6 +55,9 @@ public class Game {
 				frame.add(new GamePanel());
 				break;
 		}
+		
+		frame.validate();
+		frame.setVisible(true);
 	}
 
 }

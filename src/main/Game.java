@@ -1,8 +1,5 @@
 package main;
 
-
-import java.awt.Graphics;
-import java.awt.Rectangle;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import panel.GamePanel;
@@ -32,7 +29,7 @@ public class Game {
 		
 		t.start();
 		
-		switchPanel(1);
+		switchPanel(0);
 		
 		frame.setAlwaysOnTop(true);
 		frame.setVisible(true);

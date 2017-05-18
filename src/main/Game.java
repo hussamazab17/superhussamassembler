@@ -9,19 +9,21 @@ import panel.MainMenuPanel;
 public class Game {
 
 	public static JFrame frame;
+	public static Thread t;
 	
     public static void main(String[] args) throws Exception {
 		frame = new JFrame("Super Hassam Assembler");
 		frame.setSize(1920, 1080);
 		frame.setUndecorated(true);
 		
-		Thread t = new Thread() {
+		t = new Thread() {			
 			public void run() {
 				while(true) {
 					try {
 						Thread.sleep(1000 / 60);
 					} catch(Exception ex) {}
 					
+					frame.revalidate();
 					frame.repaint();
 				}
 			}
@@ -29,7 +31,9 @@ public class Game {
 		
 		t.start();
 		
-		frame.add(new MainMenuPanel());
+		frame.setContentPane(new MainMenuPanel());
+		
+		new Level("Boss Level").save();
 		
 		frame.setVisible(true);
     }
@@ -42,22 +46,17 @@ public class Game {
 	public static void switchPanel(int i) {
 		if(i < 0 || i > 2) return;
 		
-		frame.removeAll();
-		
 		switch(i) {
 			case 0:
-				frame.add(new MainMenuPanel());
+				frame.setContentPane(new MainMenuPanel());
 				break;
 			case 1:
-				frame.add(new LevelEditorPanel());
+				frame.setContentPane(new LevelEditorPanel());
 				break;
 			case 2:
-				frame.add(new GamePanel());
+				frame.setContentPane(new GamePanel());
 				break;
 		}
-		
-		frame.validate();
-		frame.setVisible(true);
 	}
 
 }

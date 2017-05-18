@@ -3,6 +3,10 @@ package blocks;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public abstract class Block extends Rectangle {
 
@@ -13,8 +17,13 @@ public abstract class Block extends Rectangle {
 		this.color = color;
 	}
 	
-	public Block(Image img) {
-		image = img;
+	public Block(String s) {
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File("images", s));
+		} catch (IOException e) {
+		}
+
 	}
 	
 	public Image getImage() {

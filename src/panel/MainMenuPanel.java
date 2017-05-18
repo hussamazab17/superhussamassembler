@@ -20,14 +20,14 @@ public class MainMenuPanel extends JPanel {
 			new AnimationSquare(new Rectangle(1920 / 2 - 100, 1080 - 300, 200, 50), Color.LIGHT_GRAY, Color.YELLOW)
 			{
 				public void doAction() {
-					Game.switchPanel(2);
+					Game.switchPanel(1);
 					System.out.println("Editor button pressed.");
 				}
 			},
 			new AnimationSquare(new Rectangle(1920 / 2 - 100, 1080 - 500, 200, 50), Color.LIGHT_GRAY, Color.YELLOW)
 			{
 				public void doAction() {
-					Game.switchPanel(1);
+					Game.switchPanel(2);
 					System.out.println("Play button pressed.");
 				}
 			}

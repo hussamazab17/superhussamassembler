@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -31,6 +32,9 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 		size = 15;
 		xOff = (1920 - size * editorArr[0].length) / 2;
 		yOff = (1080 - size * editorArr.length) / 2 - 100;
+		
+		KeyboardFocusManager kf = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		kf.addKeyEventDispatcher(this);
 		
 		for(int y = 0; y < editorArr.length; y++) {
 			for(int x = 0; x < editorArr[0].length; x++) {
@@ -60,6 +64,20 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 				this.addMouseMotionListener(editorArr[y][x]);
 			}
 		}
+		
+		final LevelEditorPanel p = this;
+		new Thread() {
+			public void run() {
+				while(isVisible()) {
+					try {
+						Thread.sleep(100);
+					} catch(Exception ex) {}				
+				}
+				
+				KeyboardFocusManager kf = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+				kf.removeKeyEventDispatcher(p);
+			}
+		}.start();
 	}
  	
 	public void paintComponent(Graphics g) {
@@ -100,6 +118,26 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent ke) {
+		if(!menuActive || ke.getID() != KeyEvent.KEY_TYPED) return false;
+		
+		if(shift)
+			shift = false;
+		if(ke.getKeyCode() == KeyEvent.VK_SHIFT)
+			shift = true;
+		
+		if(Character.isAlphabetic(ke.getKeyChar())) {
+			if(shift) {
+				name += ke.getKeyChar() - 32;
+				return false;
+			}
+			name += ke.getKeyChar();
+		}
+		
+		if(ke.getKeyCode() == 0) {
+			System.out.println("reached");
+			name = name.substring(0, name.length() - 1);
+		}
+		
 		return false;
 	}
 

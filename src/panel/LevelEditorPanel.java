@@ -117,26 +117,31 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 	}
 
 	@Override
-	public boolean dispatchKeyEvent(KeyEvent ke) {
-		if(!menuActive || ke.getID() != KeyEvent.KEY_TYPED) return false;
+	public boolean dispatchKeyEvent(KeyEvent ke) {        
+		if(!menuActive || ke.getID() != KeyEvent.KEY_PRESSED) return false;
 		
+        if(ke.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+			try {
+                name = name.substring(0, name.length() - 1);
+            } catch(Exception ex) {}
+            return false;
+        }
+        
+        if(name.length() == 16) return false;
+        
 		if(shift)
 			shift = false;
 		if(ke.getKeyCode() == KeyEvent.VK_SHIFT)
 			shift = true;
-		
-		if(Character.isAlphabetic(ke.getKeyChar())) {
+        
+		if(Character.isAlphabetic(ke.getKeyChar()) ||
+                Character.isDigit(ke.getKeyChar())) {
 			if(shift) {
 				name += ke.getKeyChar() - 32;
 				return false;
 			}
 			name += ke.getKeyChar();
-		}
-		
-		if(ke.getKeyCode() == 0) {
-			System.out.println("reached");
-			name = name.substring(0, name.length() - 1);
-		}
+        }
 		
 		return false;
 	}

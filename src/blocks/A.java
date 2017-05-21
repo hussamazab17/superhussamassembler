@@ -1,11 +1,13 @@
+package blocks;
 
-import blocks.Block;
-import java.net.URL;
+import java.awt.Rectangle;
 
 public class A extends Block {
-	
-	public A(URL url) {
-		
-	}
-	
+    
+    public A(Rectangle r) {
+        super("A.png", r);
+    }
+    
+    
+    
 }

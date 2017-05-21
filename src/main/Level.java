@@ -39,21 +39,4 @@ public class Level {
 		}
 	}
 	
-	public void save() throws IOException {
-		File f = new File("level", name + ".txt");
-		
-		if(!f.exists()) 
-			f.createNewFile();
-		
-		FileWriter fw = new FileWriter(f);
-		
-		for(char[] carr : arr) {
-			System.out.println(new String(carr));
-			fw.append(new String(carr) + System.lineSeparator());
-		}
-		
-		fw.flush();
-		fw.close();
-	}
-	
 }

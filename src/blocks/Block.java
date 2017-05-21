@@ -1,47 +1,36 @@
 package blocks;
 
-import java.awt.Color;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import main.HitBox;
 
-public abstract class Block extends Rectangle {
-
-	private Color color;
-	private Image image;
+public abstract class Block extends HitBox {
+    
+	private BufferedImage image;
 	
-	public Block(Color color) {
-		this.color = color;
-	}
-	
-	public Block(String s) {
+	public Block(String s, Rectangle r) {
+        super((int)r.getX(), (int)r.getY(), (int)r.getWidth(), 
+                (int)r.getHeight());
+        
 		BufferedImage img = null;
 		try {
 			img = ImageIO.read(new File("images", s));
 		} catch (IOException e) {
 		}
-
 	}
-	
-	public Image getImage() {
-		return image;
-	}
-	
-	public void setImage(Image img) {
-		image = img;
-	}
-	
-	public Color getColor() {
-		return color;
-	}
-	
-	public void setColor(Color c) {
-		this.color = c;
-	}
-	
-	
-	
+    
+    public Block(String s, int x, int y, int w, int h) {
+        this(s, new Rectangle(x, y, w, h));
+    }
+    
+    public void update() {
+        
+    }
+    
+    public BufferedImage getImage() {
+        return image;
+    }
 }

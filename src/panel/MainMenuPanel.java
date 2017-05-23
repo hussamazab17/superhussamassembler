@@ -6,7 +6,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 import main.AnimationSquare;
 import main.Game;
@@ -28,7 +27,6 @@ public class MainMenuPanel extends JPanel {
 			{
 				public void doAction() {
 					Game.switchPanel(2);
-					System.out.println("Play button pressed.");
 				}
 			}
 		};

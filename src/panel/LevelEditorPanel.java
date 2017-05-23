@@ -5,6 +5,7 @@ import blocks.Block;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
@@ -17,27 +18,57 @@ import java.io.FileWriter;
 import java.util.Scanner;
 import javax.swing.JPanel;
 import main.AnimationSquare;
+import main.Game;
 
 public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 	
 	private Block currentBlock;
 	private BlockSelectBox[] selectArr = {};
 	private BlockBox[][] editorArr;
+	private AnimationSquare mainMenu, save, load;
 	private int xOff, yOff, size;
 	private boolean menuActive, shift, isLoading;
 	private String name, errorMessage;
 	
 	public LevelEditorPanel() {
-		this.currentBlock = null;
-		this.editorArr = new BlockBox[40][90];
-		this.menuActive = true;
+		this.currentBlock = new A(new Rectangle(0, 0, 16, 16));
+		this.editorArr = new BlockBox[16][30];
+		this.mainMenu = new AnimationSquare(new Rectangle(0, 0, 150, 50),
+			Color.ORANGE, Color.YELLOW) {
+			public void doAction() {
+				Game.switchPanel(0);
+			}
+		};
+		this.save = new AnimationSquare(new Rectangle(1920 - 150, 0, 150, 50),
+			Color.GREEN, Color.GREEN.darker()) {
+			public void doAction() {
+				menuActive = true;
+				isLoading = false;
+			}
+		};
+		this.load = new AnimationSquare(new Rectangle(1920 - 150, 51, 150, 50),
+			Color.CYAN, Color.BLUE) {
+			public void doAction() {
+				menuActive = true;
+				isLoading = true;
+			}
+		};
+		
+		addMouseListener(mainMenu);
+		addMouseMotionListener(mainMenu);
+		addMouseListener(save);
+		addMouseMotionListener(save);
+		addMouseListener(load);
+		addMouseMotionListener(load);
+		
+		this.menuActive = false;
 		this.shift = false;
 		this.name = "";
 		this.errorMessage = "";
 		
-		size = 16;
+		size = 48;
 		xOff = (1920 - size * editorArr[0].length) / 2;
-		yOff = (1080 - size * editorArr.length) / 2 - 150;
+		yOff = (1080 - size * editorArr.length) / 2 - 100;
 		
 		KeyboardFocusManager kf = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		kf.addKeyEventDispatcher(this);
@@ -95,11 +126,12 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 		Graphics2D g2 = (Graphics2D)g;
 				
 		g.setColor(Color.GRAY);
-		g.fillRect(xOff, yOff, 1920 - xOff * 2, 1080 - (yOff + 150) * 2);
+		g.fillRect(xOff, yOff, 1920 - xOff * 2, 1080 - (yOff + 100) * 2);
+		g.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
+		FontMetrics fm = g2.getFontMetrics();
 		
 		if(menuActive) {
 			g.setColor(Color.WHITE);
-			g.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
 			
             g.setColor(Color.LIGHT_GRAY);
 		
@@ -117,10 +149,61 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
             g.setColor(Color.GRAY);
             
 			g.drawString(name, 20, 20);
-            g.fillRect(1920 / 2 - 250, 1080 / 2 - 300, 500, 600);
+			Rectangle r = new Rectangle(1920 / 2 - 250, 1080 / 2 - 300, 500, 600);
+            g2.fill(r);
+			
+			Color c = null;
+			
+			if(isLoading) {
+				
+			} else {
+				
+			}
+			
+			g.setColor(Color.WHITE);
+			
+			g.drawString("Level Name", (int) (r.getX() + 
+				r.getWidth() / 2) - 
+				fm.stringWidth("Level Name") / 2, (int) (r.getY() + 10 + 
+				fm.getAscent()));
             
             return;
 		}
+		
+		g.setColor(Color.ORANGE);
+		g2.fill(mainMenu.getRectangle());
+		
+		g.setColor(mainMenu.getColor());
+		g2.draw(mainMenu.getRectangle());
+
+		g.setColor(Color.WHITE);
+		g.drawString("Main Menu", (int) mainMenu.getRectangle().getWidth() / 2 - 
+				fm.stringWidth("Main Menu") / 2,
+				(int) mainMenu.getHeight() - fm.getAscent() / 2);
+		
+		g.setColor(Color.GREEN);
+		g2.fill(save.getRectangle());
+		
+		g.setColor(save.getColor());
+		g2.draw(save.getRectangle());
+		
+		g.setColor(Color.WHITE);
+		g.drawString("Save", (int) (save.getRectangle().getX() + 
+				save.getRectangle().getWidth() / 2) - 
+				fm.stringWidth("Save") / 2, (int) ((int) save.getY() + 
+				save.getHeight() - fm.getAscent() / 2));
+		
+		g.setColor(Color.CYAN);
+		g2.fill(load.getRectangle());
+		
+		g.setColor(load.getColor());
+		g2.draw(load.getRectangle());
+		
+		g.setColor(Color.WHITE);
+		g.drawString("Load", (int) (load.getRectangle().getX() + 
+				load.getRectangle().getWidth() / 2) - 
+				fm.stringWidth("Load") / 2, (int) ((int) load.getY() + 
+				load.getHeight() - fm.getAscent() / 2));
 		
 		g.setColor(Color.LIGHT_GRAY);
 		
@@ -143,7 +226,7 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 	}
 
 	@Override
-	public boolean dispatchKeyEvent(KeyEvent ke) {        
+	public boolean dispatchKeyEvent(KeyEvent ke) {		
 		if(!menuActive || ke.getID() != KeyEvent.KEY_PRESSED) return false;
 		
         if(ke.getKeyCode() == KeyEvent.VK_BACK_SPACE) {

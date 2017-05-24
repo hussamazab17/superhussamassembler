@@ -377,6 +377,9 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
                 fw.append(box.getBlock().getClass().getSimpleName());
             }
         }
+		
+		fw.flush();
+		fw.close();
     }
     
     public void load(String s) throws Exception {

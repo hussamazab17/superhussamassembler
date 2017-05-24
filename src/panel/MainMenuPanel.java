@@ -13,22 +13,31 @@ import main.Game;
 public class MainMenuPanel extends JPanel {
 	
 	private AnimationSquare[] squares;
+	private AnimationSquare close;
 	
 	public MainMenuPanel() {
 		squares = new AnimationSquare[] {
-			new AnimationSquare(new Rectangle(1920 / 2 - 100, 1080 - 300, 200, 50), Color.LIGHT_GRAY, Color.YELLOW)
-			{
+			new AnimationSquare(new Rectangle(1920 / 2 - 100, 1080 - 300, 200, 50), Color.LIGHT_GRAY, Color.YELLOW) {
 				public void doAction() {
 					Game.switchPanel(1);
 				}
 			},
-			new AnimationSquare(new Rectangle(1920 / 2 - 100, 1080 - 500, 200, 50), Color.LIGHT_GRAY, Color.YELLOW)
-			{
+			new AnimationSquare(new Rectangle(1920 / 2 - 100, 1080 - 500, 200, 50), Color.LIGHT_GRAY, Color.YELLOW) {
 				public void doAction() {
 					Game.switchPanel(2);
 				}
 			}
 		};
+		
+		close = new AnimationSquare(new Rectangle(1920 - 25, 0, 25, 25)) {
+			public void doAction() {
+				Game.frame.setVisible(false);
+				Game.frame.dispose();
+			}
+		};
+		
+		addMouseListener(close);
+		addMouseMotionListener(close);
 		
 		for(AnimationSquare ani : squares) {
 			addMouseListener(ani);
@@ -43,11 +52,21 @@ public class MainMenuPanel extends JPanel {
 		setBackground(Color.BLACK);
 		
 		Graphics2D g2 = (Graphics2D)g;
-		g.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
+		g.setFont(new Font("Comic Sans MS", Font.BOLD, 50));
 		FontMetrics fm = g2.getFontMetrics();
 		
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(1920 / 2 - 400, 100, 800, 1080 - 200);
+		
+		g.setColor(Color.YELLOW);
+		g.drawString("Super Hussam", 1920 / 2 - fm.stringWidth("Super Hussam") 
+				/ 2, 1080 / 2 - 375 + fm.getAscent());
+		g.drawString("Assembler", 1920 / 2 - fm.stringWidth("Assembler")
+				/ 2, 1080 / 2 - 275 + fm.getAscent());
+		
+		g.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
+		fm = g2.getFontMetrics();
+		
 		
 		for(AnimationSquare ani : squares) {
 			g.setColor(Color.GRAY);
@@ -68,9 +87,13 @@ public class MainMenuPanel extends JPanel {
 				g.drawString("Play", x, y);
 			}
 		}
+		
+		g.setColor(Color.RED);
+		g2.fill(close.getRectangle());
+		
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
+		
+		g.drawString("X", 1920 - 20, 20);
 	}
-	
-	
-	
-
 }

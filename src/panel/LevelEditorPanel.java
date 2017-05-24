@@ -80,6 +80,8 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 			public void doAction() {
 				try {
 					save();
+					menuActive = false;
+					isLoading = false;
 				} catch (Exception ex) {}
 			}
 			
@@ -95,6 +97,8 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 			public void doAction() {
 				try {
 					load(name);
+					menuActive = false;
+					isLoading = false;
 				} catch (Exception ex) {}
 			}
 			
@@ -372,7 +376,6 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
             for(BlockBox box : arr) {
                 fw.append(box.getBlock().getClass().getSimpleName());
             }
-            System.out.println();
         }
     }
     

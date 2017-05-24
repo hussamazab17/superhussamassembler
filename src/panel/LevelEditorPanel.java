@@ -16,8 +16,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JPanel;
 import main.AnimationSquare;
 import main.Game;
@@ -41,6 +39,12 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 			public void doAction() {
 				Game.switchPanel(0);
 			}
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(menuActive) return;
+				super.mouseClicked(me);
+			}
 		};
 		this.save = new AnimationSquare(new Rectangle(1920 - 150, 0, 150, 50),
 			Color.GREEN, Color.GREEN.darker().darker().darker()) {
@@ -48,10 +52,12 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 				name = "";
 				menuActive = true;
 				isLoading = false;
-				addMouseListener(menuSave);
-				addMouseMotionListener(menuSave);
-				addMouseListener(menuCancel);
-				addMouseMotionListener(menuCancel);
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(menuActive) return;
+				super.mouseClicked(me);
 			}
 		};
 		this.load = new AnimationSquare(new Rectangle(1920 - 150, 51, 150, 50),
@@ -60,10 +66,12 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 				name = "";
 				menuActive = true;
 				isLoading = true;
-				addMouseListener(menuLoad);
-				addMouseMotionListener(menuLoad);
-				addMouseListener(menuCancel);
-				addMouseMotionListener(menuCancel);
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(menuActive) return;
+				super.mouseClicked(me);
 			}
 		};
 		this.menuSave = new AnimationSquare(new Rectangle(1920 / 2 - 75, 
@@ -74,6 +82,12 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 					save();
 				} catch (Exception ex) {}
 			}
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(!menuActive) return;
+				super.mouseClicked(me);
+			}
 		};
 		this.menuLoad = new AnimationSquare(new Rectangle(1920 / 2 - 75, 
 				1080 / 2 - 50, 150, 50),
@@ -83,27 +97,41 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 					load(name);
 				} catch (Exception ex) {}
 			}
-		};
-		this.menuCancel = new AnimationSquare(new Rectangle(1920 / 2 - 75, 
-				1080 / 2 - 50, 150, 50),
-			Color.RED.brighter().brighter().brighter(), Color.RED) {
-			public void doAction() {
-				removeMouseListener(menuSave);
-				removeMouseMotionListener(menuSave);
-				removeMouseListener(menuLoad);
-				removeMouseMotionListener(menuLoad);
-				removeMouseListener(menuCancel);
-				removeMouseMotionListener(menuCancel);
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(!menuActive) return;
+				super.mouseClicked(me);
 			}
 		};
-		
-		
+		this.menuCancel = new AnimationSquare(new Rectangle(1920 / 2 - 75, 
+				1080 / 2 + 100, 150, 50),
+			Color.RED.brighter().brighter().brighter(), Color.RED) {
+			public void doAction() {
+                menuActive = false;
+                isLoading = false;
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(!menuActive) return;
+				super.mouseClicked(me);
+			}
+
+		};
+	
 		addMouseListener(mainMenu);
 		addMouseMotionListener(mainMenu);
 		addMouseListener(save);
 		addMouseMotionListener(save);
 		addMouseListener(load);
 		addMouseMotionListener(load);
+		addMouseListener(menuSave);
+		addMouseMotionListener(menuSave);
+		addMouseListener(menuLoad);
+		addMouseMotionListener(menuLoad);
+		addMouseListener(menuCancel);
+		addMouseMotionListener(menuCancel);
 		
 		this.menuActive = false;
 		this.shift = false;
@@ -219,10 +247,8 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 				g2.draw(menuLoad.getRectangle());
 				
 				g.setColor(Color.WHITE);
-				g.drawString("Load", (int) (1920 / 2 - 
-						menuLoad.getRectangle().getWidth() / 2 -
-						fm.stringWidth("Load") / 2),
-						1080 / 2 + fm.getAscent() + 5);
+				g.drawString("Load", 1920 / 2 - fm.stringWidth("Load") / 2,
+                        (int) (menuLoad.getY() + fm.getAscent() + 5));
 			} else {
 				g.setColor(Color.GREEN);
 				g2.fill(menuSave.getRectangle());
@@ -231,12 +257,20 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 				g2.draw(menuSave.getRectangle());
 				
 				g.setColor(Color.WHITE);
-				g.drawString("Save", (int) (1920 / 2 - 
-						menuSave.getRectangle().getWidth() / 2 -
-						fm.stringWidth("Save") / 2),
-						1080 / 2 + fm.getAscent() + 5);
+                g.drawString("Save", 1920 / 2 - fm.stringWidth("Save") / 2,
+                        (int) (menuSave.getY() + fm.getAscent() + 5));
 			}			
 			
+            g.setColor(Color.RED.brighter().brighter().brighter());
+            g2.fill(menuCancel.getRectangle());
+            
+            g.setColor(menuCancel.getColor());
+            g2.draw(menuCancel.getRectangle());
+            
+            g.setColor(Color.WHITE);
+            g.drawString("Cancel", 1920 / 2 - fm.stringWidth("Cancel") / 2, 
+                    (int) (menuCancel.getY() + fm.getAscent() + 5));
+            
             return;
 		}
 		

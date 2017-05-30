@@ -6,6 +6,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import main.AnimationSquare;
 import main.Game;
@@ -19,12 +21,16 @@ public class MainMenuPanel extends JPanel {
 		squares = new AnimationSquare[] {
 			new AnimationSquare(new Rectangle(1920 / 2 - 100, 1080 - 300, 200, 50), Color.LIGHT_GRAY, Color.YELLOW) {
 				public void doAction() {
-					Game.switchPanel(1);
+					try {
+						Game.switchPanel(1);
+					} catch (Exception ex) {}
 				}
 			},
 			new AnimationSquare(new Rectangle(1920 / 2 - 100, 1080 - 500, 200, 50), Color.LIGHT_GRAY, Color.YELLOW) {
 				public void doAction() {
-					Game.switchPanel(2);
+					try {
+						Game.switchPanel(2);
+					} catch (Exception ex) {}
 				}
 			}
 		};

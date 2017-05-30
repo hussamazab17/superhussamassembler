@@ -70,7 +70,7 @@ public class AnimationSquare implements MouseListener, MouseMotionListener {
 		current = c1;
 	}
 	
-	private boolean isInside(Point p) {
+	public boolean isInside(Point p) {
 		return p.getX() >= r.getX() && p.getY() >= r.getY() &&
 				p.getX() <= r.getX() + r.getWidth() - 1 &&
 				p.getY() <= r.getY() + r.getHeight() - 1;

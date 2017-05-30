@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
-import panel.GamePanel;
+import panel.GamePanelPackage.GamePanel;
 import panel.LevelEditorPanel;
 import panel.MainMenuPanel;
 
@@ -43,7 +43,7 @@ public class Game {
 		1 = EDITOR
 		2 = GAME
 	*/
-	public static void switchPanel(int i) {
+	public static void switchPanel(int i) throws Exception {
 		if(i < 0 || i > 2) return;
 		
 		switch(i) {
@@ -58,16 +58,21 @@ public class Game {
 				break;
 		}
 	}
-    
-    public static BufferedImage scale(BufferedImage sbi, int imageType, int dWidth, int dHeight, double fWidth, double fHeight) {
-        BufferedImage dbi = null;
-            if(sbi != null) {
-                dbi = new BufferedImage(dWidth, dHeight, imageType);
-                Graphics2D g = dbi.createGraphics();
-                AffineTransform at = AffineTransform.getScaleInstance(fWidth, fHeight);
-                g.drawRenderedImage(sbi, at);
-            }
-        return dbi;
+	
+	public static BufferedImage crop(BufferedImage src, int w, int h) {
+		BufferedImage dest = src.getSubimage(0, 0, w, h);
+        return dest;
+    }
+	
+    public static BufferedImage scale(BufferedImage imageToScale, int dWidth, int dHeight) {
+        BufferedImage scaledImage = null;
+        if (imageToScale != null) {
+            scaledImage = new BufferedImage(dWidth, dHeight, imageToScale.getType());
+            Graphics2D graphics2D = scaledImage.createGraphics();
+            graphics2D.drawImage(imageToScale, 0, 0, dWidth, dHeight, null);
+            graphics2D.dispose();
+        }
+        return scaledImage;
     }
 
 }

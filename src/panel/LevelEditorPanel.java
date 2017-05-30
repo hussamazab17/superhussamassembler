@@ -43,110 +43,6 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 	public LevelEditorPanel() throws Exception {
 		this.currentBlock = "A";
 		this.editorArr = new BlockBox[16][30];
-		this.mainMenu = new AnimationSquare(new Rectangle(0, 0, 150, 50),
-			Color.ORANGE, Color.YELLOW) {
-			public void doAction() {
-				try {
-					Game.switchPanel(0);
-				} catch (Exception ex) {}
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				if(menuActive) return;
-				super.mouseClicked(me);
-			}
-		};
-		this.save = new AnimationSquare(new Rectangle(1920 - 150, 0, 150, 50),
-			Color.GREEN, Color.GREEN.darker().darker().darker()) {
-			public void doAction() {
-				name = "";
-				menuActive = true;
-				isLoading = false;
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				if(menuActive) return;
-				super.mouseClicked(me);
-			}
-		};
-		this.load = new AnimationSquare(new Rectangle(1920 - 150, 51, 150, 50),
-			Color.CYAN, Color.BLUE) {
-			public void doAction() {
-				name = "";
-				menuActive = true;
-				isLoading = true;
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				if(menuActive) return;
-				super.mouseClicked(me);
-			}
-		};
-		this.menuSave = new AnimationSquare(new Rectangle(1920 / 2 - 75, 
-				1080 / 2 - 50, 150, 50),
-			Color.GREEN, Color.GREEN.darker().darker().darker()) {
-			public void doAction() {
-				try {
-					save();
-					menuActive = false;
-					isLoading = false;
-				} catch (Exception ex) {}
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				if(!menuActive) return;
-				super.mouseClicked(me);
-			}
-		};
-		this.menuLoad = new AnimationSquare(new Rectangle(1920 / 2 - 75, 
-				1080 / 2 - 50, 150, 50),
-			Color.CYAN, Color.BLUE) {
-			public void doAction() {
-				try {
-					load(name);
-					menuActive = false;
-					isLoading = false;
-				} catch (Exception ex) {}
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				if(!menuActive) return;
-				super.mouseClicked(me);
-			}
-		};
-		this.menuCancel = new AnimationSquare(new Rectangle(1920 / 2 - 75, 
-				1080 / 2 + 100, 150, 50),
-			Color.RED.brighter().brighter().brighter(), Color.RED) {
-			public void doAction() {
-                menuActive = false;
-                isLoading = false;
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent me) {
-				if(!menuActive) return;
-				super.mouseClicked(me);
-			}
-
-		};
-	
-		addMouseListener(mainMenu);
-		addMouseMotionListener(mainMenu);
-		addMouseListener(save);
-		addMouseMotionListener(save);
-		addMouseListener(load);
-		addMouseMotionListener(load);
-		addMouseListener(menuSave);
-		addMouseMotionListener(menuSave);
-		addMouseListener(menuLoad);
-		addMouseMotionListener(menuLoad);
-		addMouseListener(menuCancel);
-		addMouseMotionListener(menuCancel);
 		
 		for(BlockSelectBox b : selectArr) {
 			addMouseListener(b);
@@ -195,6 +91,116 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 			}
 		}
 		
+		this.mainMenu = new AnimationSquare(new Rectangle(0, 0, 150, 50),
+			Color.ORANGE, Color.YELLOW) {
+			public void doAction() {
+				try {
+					Game.switchPanel(0);
+				} catch (Exception ex) {}
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(menuActive) return;
+				super.mouseClicked(me);
+			}
+		};
+		this.save = new AnimationSquare(new Rectangle(1920 - 150, 0, 150, 50),
+			Color.GREEN, Color.GREEN.darker().darker().darker()) {
+			public void doAction() {
+				name = "";
+				menuActive = true;
+				isLoading = false;
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(menuActive) return;
+				super.mouseClicked(me);
+			}
+		};
+		this.load = new AnimationSquare(new Rectangle(1920 - 150, 51, 150, 50),
+			Color.CYAN, Color.BLUE) {
+			public void doAction() {
+				name = "";
+				menuActive = true;
+				isLoading = true;
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(menuActive) return;
+				super.mouseClicked(me);
+			}
+		};
+		this.menuSave = new AnimationSquare(new Rectangle(1920 / 2 - 75, 
+				1080 / 2 - 50, 150, 50),
+			Color.GREEN, Color.GREEN.darker().darker().darker()) {
+			public void doAction() {
+				if(isLoading) return;
+				try {
+					save();
+					menuActive = false;
+					isLoading = false;
+				} catch (Exception ex) {}
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(!menuActive) return;
+				super.mouseClicked(me);
+			}
+		};
+		this.menuLoad = new AnimationSquare(new Rectangle(1920 / 2 - 75, 
+				1080 / 2 - 50, 150, 50),
+			Color.CYAN, Color.BLUE) {
+			public void doAction() {
+				if(!isLoading) return;
+				System.out.println("reached");
+				try {
+					load();
+					menuActive = false;
+					isLoading = false;
+				} catch (Exception ex) {
+					System.err.println(ex);
+				}
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(!menuActive) return;
+				super.mouseClicked(me);
+			}
+		};
+		this.menuCancel = new AnimationSquare(new Rectangle(1920 / 2 - 75, 
+				1080 / 2 + 100, 150, 50),
+			Color.RED.brighter().brighter().brighter(), Color.RED) {
+			public void doAction() {
+                menuActive = false;
+                isLoading = false;
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if(!menuActive) return;
+				super.mouseClicked(me);
+			}
+
+		};
+	
+		addMouseListener(mainMenu);
+		addMouseMotionListener(mainMenu);
+		addMouseListener(save);
+		addMouseMotionListener(save);
+		addMouseListener(load);
+		addMouseMotionListener(load);
+		addMouseListener(menuSave);
+		addMouseMotionListener(menuSave);
+		addMouseListener(menuLoad);
+		addMouseMotionListener(menuLoad);
+		addMouseListener(menuCancel);
+		addMouseMotionListener(menuCancel);
+		
 		final LevelEditorPanel p = this;
 		new Thread() {
 			public void run() {
@@ -208,6 +214,8 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 				kf.removeKeyEventDispatcher(p);
 			}
 		}.start();
+		
+		this.setDoubleBuffered(true);
 	}
  	
 	public void paintComponent(Graphics g) {
@@ -412,41 +420,17 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 		fw.close();
     }
 	
-    public void load(String s) throws Exception {
-        File f = new File("level", s + ".txt");
-        
-        Scanner scan = new Scanner(f);
-		this.editorArr = new BlockBox[16][30];
+    public void load() throws Exception {
+		File f = new File("level", name + ".txt");
+		
+		Scanner scan = new Scanner(f);
 		
 		int y = 0;
         while(scan.hasNextLine()) {
 			int x = 0;
-			for(char c : scan.nextLine().toCharArray()) {
-				editorArr[y][x++] = new BlockBox(c + "", new Rectangle(xOff + (x * size),
-						yOff + (y * size), size, size)) {
-							public void doAction() {
-								this.setBlock(currentBlock);
-							}
-
-							public void mouseDragged(MouseEvent me) {
-								if(menuActive) return;
-								super.mouseClicked(me);
-								super.mouseDragged(me);
-							}
-
-							public void mouseMoved(MouseEvent me) {
-								if(menuActive) return;
-								super.mouseMoved(me);
-							}
-
-							public void mouseClicked(MouseEvent me) {
-								if(menuActive) return;
-								super.mouseClicked(me);
-							}
-
-						};
-					this.addMouseListener(editorArr[y][x]);
-					this.addMouseMotionListener(editorArr[y][x]);
+			String line = scan.nextLine();
+			for(char c : line.toCharArray()) {
+				editorArr[y][x++].setBlock(c + "");
 			}
 			y++;
 		}
@@ -480,7 +464,9 @@ public class LevelEditorPanel extends JPanel implements KeyEventDispatcher {
 			this.txt = s;
 			try {
 				img = ImageIO.read(new File("images", s + ".png"));
-			} catch(Exception ex) {}
+			} catch(Exception ex) {
+				System.err.print(ex);
+			}
 		}
 		
         
